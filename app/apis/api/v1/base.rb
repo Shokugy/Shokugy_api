@@ -29,7 +29,18 @@ module API
         end
       end
 
+      helpers do
+        def current_user
+          if request.headers["Uid"]
+            @current_user ||= User.find_by(uid: request.headers["Uid"])
+          end
+          return @current_user
+        end
+      end
+
       mount V1::Restaurants
+      mount V1::Groups
+      mount V1::Users
     end
   end
 end

@@ -19,17 +19,12 @@ module API
         # パラメーターの必須、任意を指定することができる。
         # use :attributesという形で使うことができる。
         params :attributes do
-          requires :title, type: String, desc: "MessageBoard title."
-          optional :body, type: String, desc: "MessageBoard body."
-        end
-
-        params :search do
           requires :name, type: String, desc: "Restaurant name."
         end
 
         # パラメータのチェック
         params :id do
-          requires :id, type: Integer, desc: "MessageBoard id."
+          requires :id, type: Integer, desc: "Restaurant id."
         end
       end
 
@@ -41,7 +36,7 @@ module API
 
         desc 'POST /api/v1/restaurants/search'
         params do
-          use :search
+          use :attributes
         end
         post '/search', jbuilder: 'api/v1/restaurants/search' do
           name = search_params[:name]
