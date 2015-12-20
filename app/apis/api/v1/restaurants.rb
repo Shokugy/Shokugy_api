@@ -7,6 +7,10 @@ module API
           ActionController::Parameters.new(params).permit(:title, :body)
         end
 
+        def search_params
+          ActionController::Parameters.new(params).permit(:name)
+        end
+
         def set_restaurant
           @restaurant = Restaurant.find(params[:id])
         end
@@ -17,6 +21,10 @@ module API
         params :attributes do
           requires :title, type: String, desc: "MessageBoard title."
           optional :body, type: String, desc: "MessageBoard body."
+        end
+
+        params :search do
+          requires :name, type: String, desc: "Restaurant name."
         end
 
         # パラメータのチェック
@@ -31,13 +39,13 @@ module API
           @restaurants = Restaurant.where(id: 1300..1303)
         end
 
-        desc 'POST /api/v1/message_boards'
+        desc 'POST /api/v1/restaurants/search'
         params do
-          use :attributes
+          use :search
         end
-        post '/' do
-          message_board = MessageBoard.new(message_board_params)
-          message_board.save
+        post '/search', jbuilder: 'api/v1/restaurants/search' do
+          name = search_params[:name]
+          @restaurants = Restaurant.where("name LIKE ? OR name_kana LIKE ?", "%#{name}%", "%#{name}%").limit(20)
         end
 
         desc 'GET /api/v1/message_boards/:id'
