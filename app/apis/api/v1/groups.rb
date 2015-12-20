@@ -18,12 +18,16 @@ module API
         # パラメータのチェック
         # パラメーターの必須(requires)、任意(optional)を指定することができる。
         # use :attributesという形で使うことができる。
-        params :attributes do
+        params :create do
           requires :name, type: String, desc: "Group name."
           requires :password, type: String, desc: "Group password"
           requires :password_confirmation, type: String, desc: "Group password_confirmation"
         end
 
+        params :login do
+          requires :name, type: String, desc: "Group name."
+          requires :password, type: String, desc: "Group password."
+        end
         # パラメータのチェック
         params :id do
           requires :id, type: Integer, desc: "Group id."
@@ -38,11 +42,21 @@ module API
 
         desc 'POST /api/v1/groups'
         params do
-          use :attributes
+          use :create
         end
         post '', jbuilder: 'api/v1/groups/create' do
           @group = Group.new(create_params)
           @error_message = @group.error.full_messages unless @user.save
+        end
+
+        desc 'POST /api/v1/groups/login'
+        params do
+          use :login
+        end
+        post '/login', jbuilder: 'api/v1/groups/login' do
+          unless @group = login(login_params)
+            @error_message = 'login failed'
+          end
         end
 
         desc 'GET /api/v1/groups/:id'
@@ -56,7 +70,6 @@ module API
         desc 'PUT /api/v1/groups/:id'
         params do
           use :id
-          use :attributes
         end
         put '/:id' do
           set_message_board
