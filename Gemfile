@@ -42,6 +42,9 @@ gem 'grape-jbuilder'
 # for group login
 gem 'sorcery'
 
+# for address to latitude and longitude
+gem 'geocoder'
+
 group :development, :test do
   gem 'byebug'
   gem 'web-console', '~> 2.0'
