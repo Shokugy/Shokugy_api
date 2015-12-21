@@ -1,4 +1,5 @@
 class ShokugyAgent < Mechanize
+
   BASE_PATH = 'http://www.gnavi.co.jp'
   # 東京ディナー
   TOKYO_DINNER_PATH = 'http://r.gnavi.co.jp/area/tokyo/rs/'
@@ -62,14 +63,14 @@ class ShokugyAgent < Mechanize
     link = url
     image_url = "http:" + page.at('.figure img')[:src] if page.at('.figure img')
     postal_code = molded_code(page.at('#info-table .adr').inner_text) if page.at('#info-table .adr')
-    addres = page.at('#info-table .region').inner_text if page.at('#info-table .region')
+    address = page.at('#info-table .region').inner_text if page.at('#info-table .region')
 
     restaurant = Restaurant.where(link: link).first_or_initialize
     restaurant.name = name
     restaurant.name_kana = name_kana
     restaurant.image_url = image_url
     restaurant.postal_code = postal_code
-    restaurant.addres = addres
+    restaurant.address = address
     restaurant.save
   end
 
