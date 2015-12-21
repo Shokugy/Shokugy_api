@@ -1,4 +1,5 @@
 class ShokugyAgent < Mechanize
+
   BASE_PATH = 'http://www.gnavi.co.jp'
   # 東京ディナー
   TOKYO_DINNER_PATH = 'http://r.gnavi.co.jp/area/tokyo/rs/'
