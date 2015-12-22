@@ -41,6 +41,7 @@ module API
       mount V1::Restaurants
       mount V1::Groups
       mount V1::Users
+      mount V1::Reviews
     end
   end
 end
