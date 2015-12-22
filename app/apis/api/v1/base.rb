@@ -42,6 +42,7 @@ module API
       mount V1::Groups
       mount V1::Users
       mount V1::Reviews
+      mount V1::Invites
     end
   end
 end
