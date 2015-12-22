@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151222085320) do
+ActiveRecord::Schema.define(version: 20151222144228) do
 
   create_table "group_users", force: :cascade do |t|
     t.integer  "group_id",   limit: 4
@@ -32,6 +32,27 @@ ActiveRecord::Schema.define(version: 20151222085320) do
   end
 
   add_index "groups", ["name"], name: "index_groups_on_name", unique: true, using: :btree
+
+  create_table "invite_users", force: :cascade do |t|
+    t.integer  "invite_id",  limit: 4
+    t.integer  "user_id",    limit: 4
+    t.datetime "created_at",           null: false
+    t.datetime "updated_at",           null: false
+  end
+
+  add_index "invite_users", ["invite_id"], name: "index_invite_users_on_invite_id", using: :btree
+  add_index "invite_users", ["user_id"], name: "index_invite_users_on_user_id", using: :btree
+
+  create_table "invites", force: :cascade do |t|
+    t.text     "text",          limit: 65535
+    t.integer  "restaurant_id", limit: 4
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
+    t.integer  "user_id",       limit: 4
+  end
+
+  add_index "invites", ["restaurant_id"], name: "index_invites_on_restaurant_id", using: :btree
+  add_index "invites", ["user_id"], name: "index_invites_on_user_id", using: :btree
 
   create_table "restaurants", force: :cascade do |t|
     t.string   "name",        limit: 255
@@ -67,6 +88,10 @@ ActiveRecord::Schema.define(version: 20151222085320) do
 
   add_foreign_key "group_users", "groups"
   add_foreign_key "group_users", "users"
+  add_foreign_key "invite_users", "invites"
+  add_foreign_key "invite_users", "users"
+  add_foreign_key "invites", "restaurants"
+  add_foreign_key "invites", "users"
   add_foreign_key "reviews", "restaurants"
   add_foreign_key "reviews", "users"
 end
