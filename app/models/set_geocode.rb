@@ -11,13 +11,13 @@ class SetGeocode
     @@restaurants.each do |restaurant|
       if restaurant.geocode
         restaurant.update(latitude: restaurant.geocode[0], longitude: restaurant.geocode[1])
-        sleep(1)
       else
         postal_code = restaurant.postal_code
         latitude = GoogleGeocoding.instance.geocode_from(postal_code)[:latitude]
         longitude = GoogleGeocoding.instance.geocode_from(postal_code)[:longitude]
         restaurant.update(latitude: latitude, longitude: longitude)
       end
+      sleep(1)
     end
   end
 
