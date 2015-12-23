@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151223090338) do
+ActiveRecord::Schema.define(version: 20151223080608) do
 
   create_table "group_users", force: :cascade do |t|
     t.integer  "group_id",   limit: 4
@@ -44,16 +44,13 @@ ActiveRecord::Schema.define(version: 20151223090338) do
   add_index "invite_users", ["user_id"], name: "index_invite_users_on_user_id", using: :btree
 
   create_table "invites", force: :cascade do |t|
-    t.text     "text",            limit: 65535
-    t.integer  "restaurant_id",   limit: 4
-    t.datetime "created_at",                    null: false
-    t.datetime "updated_at",                    null: false
-    t.integer  "user_id",         limit: 4
-    t.integer  "inviteable_id",   limit: 4
-    t.string   "inviteable_type", limit: 255
+    t.text     "text",          limit: 65535
+    t.integer  "restaurant_id", limit: 4
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
+    t.integer  "user_id",       limit: 4
   end
 
-  add_index "invites", ["inviteable_type", "inviteable_id"], name: "index_invites_on_inviteable_type_and_inviteable_id", using: :btree
   add_index "invites", ["restaurant_id"], name: "index_invites_on_restaurant_id", using: :btree
   add_index "invites", ["user_id"], name: "index_invites_on_user_id", using: :btree
 
