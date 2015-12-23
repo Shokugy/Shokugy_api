@@ -38,9 +38,10 @@ module API
           use :create
         end
         post '/create', jbuilder: 'api/v1/reviews/create' do
-          # TODO: current_user.reviews.create(review: "good", rate: 4.5, restaurant_id: 4)
-          review = Review.new(create_params)
-          @error_message = review.error.full_messages unless review.save
+          review = current_user.reviews.create(create_params)
+          unless review.save
+            @error_message = review.error.full_messages
+          end
         end
 
         desc 'GET /api/v1/message_boards/:id'
