@@ -18,7 +18,6 @@ module API
           requires :review, type: String, desc: "Review review."
           requires :rate, type: Float, desc: "Review rate."
           requires :restaurant_id, type: Integer, desc: "Review restaurant_id"
-          requires :user_id, type: Integer, desc: "Review user_id"
         end
 
         # パラメータのチェック
