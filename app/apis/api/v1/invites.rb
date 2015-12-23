@@ -4,7 +4,7 @@ module API
       helpers do
         # Strong Parametersの設定
         def create_params
-          ActionController::Parameters.new(params).permit(:text, :restaurant_id)
+          ActionController::Parameters.new(params).permit(:text, :restaurant_id).merge(group_id: current_user.active_group_id)
         end
 
         def set_invite
@@ -42,10 +42,17 @@ module API
         params do
           use :create
         end
-        # TODO: current_user.invites.create(text: "good", restaurant_id: 3, group_id: current_user.active_group_id)
         post '', jbuilder: 'api/v1/invites/create' do
-          invite = Invite.new(create_params)
-          @error_message = invite.error.full_messages unless invite.save
+          invite = current_user.invites.new(create_params)
+          unless invite.save
+            @error_message = invite.error.full_messages
+            return
+          end
+          restaurant = Restaurant.find(invite.restaurant_id)
+          group = Group.find(current_user.active_group_id)
+          group.users.each do |user|
+            user.notifications.create(content: "#{current_user.name}さんが#{restaurant.name}へ一緒に行く仲間を募集しています。") unless user.id == current_user.id
+          end
         end
 
         desc 'GET /api/v1/message_boards/:id'
