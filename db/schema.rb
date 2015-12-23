@@ -11,7 +11,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151223172652) do
+ActiveRecord::Schema.define(version: 20151223212158) do
+
+  create_table "favorites", force: :cascade do |t|
+    t.integer  "user_id",       limit: 4
+    t.integer  "restaurant_id", limit: 4
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
+  end
+
+  add_index "favorites", ["restaurant_id"], name: "index_favorites_on_restaurant_id", using: :btree
+  add_index "favorites", ["user_id"], name: "index_favorites_on_user_id", using: :btree
 
   create_table "group_users", force: :cascade do |t|
     t.integer  "group_id",   limit: 4
@@ -109,6 +119,8 @@ ActiveRecord::Schema.define(version: 20151223172652) do
     t.string   "fb_id",           limit: 255
   end
 
+  add_foreign_key "favorites", "restaurants"
+  add_foreign_key "favorites", "users"
   add_foreign_key "group_users", "groups"
   add_foreign_key "group_users", "users"
   add_foreign_key "invite_users", "invites"
