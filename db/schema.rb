@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151223105521) do
+ActiveRecord::Schema.define(version: 20151223172652) do
 
   create_table "group_users", force: :cascade do |t|
     t.integer  "group_id",   limit: 4
@@ -55,6 +55,15 @@ ActiveRecord::Schema.define(version: 20151223105521) do
   add_index "invites", ["group_id"], name: "index_invites_on_group_id", using: :btree
   add_index "invites", ["restaurant_id"], name: "index_invites_on_restaurant_id", using: :btree
   add_index "invites", ["user_id"], name: "index_invites_on_user_id", using: :btree
+
+  create_table "notifications", force: :cascade do |t|
+    t.text     "content",    limit: 65535
+    t.integer  "user_id",    limit: 4
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
+  end
+
+  add_index "notifications", ["user_id"], name: "index_notifications_on_user_id", using: :btree
 
   create_table "rates", force: :cascade do |t|
     t.float    "rate",          limit: 24
@@ -107,6 +116,7 @@ ActiveRecord::Schema.define(version: 20151223105521) do
   add_foreign_key "invites", "groups"
   add_foreign_key "invites", "restaurants"
   add_foreign_key "invites", "users"
+  add_foreign_key "notifications", "users"
   add_foreign_key "rates", "groups"
   add_foreign_key "rates", "restaurants"
   add_foreign_key "reviews", "restaurants"
