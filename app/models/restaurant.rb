@@ -1,11 +1,11 @@
 class Restaurant < ActiveRecord::Base
-  geocoded_by :address
-  after_validation :geocode, if: Proc.new { |a| a.address_changed? }
+  # geocoded_by :address
+  # after_validation :geocode, if: Proc.new { |a| a.address_changed? }
 
   # association
   has_many :reviews
-  # MEMO: polymorphic
-  has_many :invites, as: :inviteable
+  has_many :invites
+  has_many :rates
 
   class << self
     def set_geocode(restaurants)

@@ -10,7 +10,7 @@ class Group < ActiveRecord::Base
   # association
   has_many :users, through: :group_users
   has_many :group_users
-  # MEMO: polymorphic
-  has_many :invites, as: :inviteable
+  has_many :invites
+  has_many :rates
 
 end
