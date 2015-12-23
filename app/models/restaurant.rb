@@ -4,7 +4,8 @@ class Restaurant < ActiveRecord::Base
 
   # association
   has_many :reviews
-  has_many :invites
+  # MEMO: polymorphic
+  has_many :invites, as: :inviteable
 
   class << self
     def set_geocode(restaurants)
