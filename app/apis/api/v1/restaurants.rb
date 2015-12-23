@@ -36,7 +36,7 @@ module API
 
         desc 'GET /api/v1/restaurants/ranking'
         get '/ranking', jbuilder: 'api/v1/restaurants/ranking' do
-          rates = Rate.where(group_id: current_user.active_group_id).order("rate DESC").limit(20)
+          rates = Rate.where(group_id: current_user.active_group_id).order("rate DESC").limit(10)
           @ranking = []
           if rates.present?
             rates.each do |rate|
