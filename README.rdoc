@@ -7,7 +7,7 @@ application up and running.
 
 * User 多対多 Invite
 
-* Invite 多対一 Restaurant (inviteable:references{polymorphic})
+* Invite 多対一 Restaurant
 
 * Restaurant 一対多 Review
 
@@ -15,7 +15,11 @@ application up and running.
 
 * User 一対多 Invite
 
-* Invite 多対一 Group (inviteable:references{polymorphic})
+* Invite 多対一 Group
+
+* Group 一対多 Rate
+
+* Rate 多対一 Restaurant
 
 
 We want to eat
