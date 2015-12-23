@@ -23,6 +23,10 @@ application up and running.
 
 * User 一対多 Notification
 
+* User 一対多 Favorite
+
+* Favorite 多対一 Restaurant
+
 
 We want to eat
 <tt>roast hose</tt>.

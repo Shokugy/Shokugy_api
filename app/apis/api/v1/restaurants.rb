@@ -11,6 +11,10 @@ module API
           ActionController::Parameters.new(params).permit(:name)
         end
 
+        def favorite_params
+          ActionController::Parameters.new(params).permit(:restaurant_id)
+        end
+
         def set_restaurant
           @restaurant = Restaurant.find(params[:id])
         end
@@ -18,7 +22,7 @@ module API
         # パラメータのチェック
         # パラメーターの必須、任意を指定することができる。
         # use :attributesという形で使うことができる。
-        params :attributes do
+        params :search do
           requires :name, type: String, desc: "Restaurant name."
         end
 
@@ -45,14 +49,30 @@ module API
           end
         end
 
+        desc 'GET /api/v1/restaurants/favorite'
+        get '/favorite', jbuilder: 'api/v1/restaurants/favorite' do
+          @favorites = []
+          current_user.favorites.order("created_at DESC").each do |favorite|
+            @favorites << Restaurant.find(favorite.restaurant_id)
+          end
+        end
+
         desc 'POST /api/v1/restaurants/search'
         params do
-          use :attributes
+          use :search
         end
         post '/search', jbuilder: 'api/v1/restaurants/search' do
           name = search_params[:name]
           @restaurants = Restaurant.where("name LIKE ? OR name_kana LIKE ?", "%#{name}%", "%#{name}%").limit(20)
           Restaurant.set_geocode(@restaurants)
+        end
+
+        desc 'POST /api/v1/restaurants/favorite'
+        params do
+          use :id
+        end
+        post '/favorite', jbuilder: 'api/v1/restaurants/favorite' do
+          current_user.favorites.create(favorite_params)
         end
 
         desc 'GET /api/v1/message_boards/:id'
@@ -66,7 +86,7 @@ module API
         desc 'PUT /api/v1/message_boards/:id'
         params do
           use :id
-          use :attributes
+          use :search
         end
         put '/:id' do
           set_message_board

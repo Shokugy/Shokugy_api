@@ -46,7 +46,7 @@ module API
         end
         post '/create', jbuilder: 'api/v1/groups/create' do
           @group = Group.new(create_params)
-          unless @user.save
+          unless @group.save
             @error_message = @group.error.full_messages
             return
           end

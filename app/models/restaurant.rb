@@ -6,6 +6,7 @@ class Restaurant < ActiveRecord::Base
   has_many :reviews
   has_many :invites
   has_many :rates
+  has_many :favorites
 
   class << self
     def set_geocode(restaurants)
