@@ -31,8 +31,8 @@ module API
 
       helpers do
         def current_user
-          if request.headers["fbId"]
-            @current_user ||= User.find_by(fb_id: request.headers["fbId"])
+          if request.headers["Fb-Id"]
+            @current_user ||= User.find_by(fb_id: request.headers["Fb-Id"])
           end
           return @current_user
         end
