@@ -6,5 +6,6 @@ class User < ActiveRecord::Base
   has_many :invites
   has_many :invite_users
   has_many :reviews
+  has_many :notifications
 
 end
