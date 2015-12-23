@@ -37,7 +37,7 @@ module API
         params do
           use :create
         end
-        post '', jbuilder: 'api/v1/reviews/create' do
+        post '/create', jbuilder: 'api/v1/reviews/create' do
           review = Review.new(create_params)
           @error_message = review.error.full_messages unless review.save
         end

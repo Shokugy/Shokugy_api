@@ -38,7 +38,7 @@ module API
         params do
           use :attributes
         end
-        post '', jbuilder: 'api/v1/users/create' do
+        post '/create', jbuilder: 'api/v1/users/create' do
           @user = User.new(create_params)
           unless @user.save
             @error_message = @user.error.full_messages

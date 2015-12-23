@@ -44,7 +44,7 @@ module API
         params do
           use :create
         end
-        post '', jbuilder: 'api/v1/groups/create' do
+        post '/create', jbuilder: 'api/v1/groups/create' do
           @group = Group.new(create_params)
           @error_message = @group.error.full_messages unless @user.save
         end
