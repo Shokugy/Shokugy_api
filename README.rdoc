@@ -21,6 +21,8 @@ application up and running.
 
 * Rate 多対一 Restaurant
 
+* User 一対多 Notification
+
 
 We want to eat
 <tt>roast hose</tt>.
