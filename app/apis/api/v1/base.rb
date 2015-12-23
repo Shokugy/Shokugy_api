@@ -43,6 +43,7 @@ module API
       mount V1::Users
       mount V1::Reviews
       mount V1::Invites
+      mount V1::Notifications
     end
   end
 end
