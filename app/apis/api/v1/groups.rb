@@ -45,10 +45,12 @@ module API
           use :create
         end
         post '/create', jbuilder: 'api/v1/groups/create' do
-          # TODO: current_userをgroupに追加
-          # user.groups << group
           @group = Group.new(create_params)
-          @error_message = @group.error.full_messages unless @user.save
+          unless @user.save
+            @error_message = @group.error.full_messages
+            return
+          end
+          @group.users << current_user
         end
 
         desc 'POST /api/v1/groups/login'
@@ -56,11 +58,16 @@ module API
           use :login
         end
         post '/login', jbuilder: 'api/v1/groups/login' do
-          # TODO: current_userのacrive_group_idをupdate
-          # user.update(active_group_id: group.id)
-          # user.groupsに存在していなかったら、user.groups << group
           unless @group = login(login_params)
             @error_message = 'login failed'
+            return
+          end
+          current_user.update(active_group_id: @group.id)
+          unless @group.users.ids.include?(current_user.id)
+            @group.users.each do |user|
+              user.notifications.create(content: "#{current_user.name}さんが#{@group.name}に参加しました。")
+            end
+            @group.users << current_user
           end
         end
 
