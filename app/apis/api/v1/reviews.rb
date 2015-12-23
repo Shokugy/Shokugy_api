@@ -4,7 +4,7 @@ module API
       helpers do
         # Strong Parametersの設定
         def create_params
-          ActionController::Parameters.new(params).permit(:review, :rate, :restaurant_id, :user_id)
+          ActionController::Parameters.new(params).permit(:review, :rate, :restaurant_id)
         end
 
         def set_review
@@ -38,6 +38,7 @@ module API
           use :create
         end
         post '/create', jbuilder: 'api/v1/reviews/create' do
+          # TODO: current_user.reviews.create(review: "good", rate: 4.5, restaurant_id: 4)
           review = Review.new(create_params)
           @error_message = review.error.full_messages unless review.save
         end
