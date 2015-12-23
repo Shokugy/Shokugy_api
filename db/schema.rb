@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151223080608) do
+ActiveRecord::Schema.define(version: 20151223105521) do
 
   create_table "group_users", force: :cascade do |t|
     t.integer  "group_id",   limit: 4
@@ -49,10 +49,23 @@ ActiveRecord::Schema.define(version: 20151223080608) do
     t.datetime "created_at",                  null: false
     t.datetime "updated_at",                  null: false
     t.integer  "user_id",       limit: 4
+    t.integer  "group_id",      limit: 4
   end
 
+  add_index "invites", ["group_id"], name: "index_invites_on_group_id", using: :btree
   add_index "invites", ["restaurant_id"], name: "index_invites_on_restaurant_id", using: :btree
   add_index "invites", ["user_id"], name: "index_invites_on_user_id", using: :btree
+
+  create_table "rates", force: :cascade do |t|
+    t.float    "rate",          limit: 24
+    t.integer  "restaurant_id", limit: 4
+    t.integer  "group_id",      limit: 4
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
+  end
+
+  add_index "rates", ["group_id"], name: "index_rates_on_group_id", using: :btree
+  add_index "rates", ["restaurant_id"], name: "index_rates_on_restaurant_id", using: :btree
 
   create_table "restaurants", force: :cascade do |t|
     t.string   "name",        limit: 255
@@ -65,7 +78,6 @@ ActiveRecord::Schema.define(version: 20151223080608) do
     t.datetime "updated_at",                null: false
     t.float    "latitude",    limit: 24
     t.float    "longitude",   limit: 24
-    t.float    "rate",        limit: 24
   end
 
   create_table "reviews", force: :cascade do |t|
@@ -84,16 +96,19 @@ ActiveRecord::Schema.define(version: 20151223080608) do
     t.string   "name",            limit: 255
     t.datetime "created_at",                  null: false
     t.datetime "updated_at",                  null: false
-    t.string   "uid",             limit: 255
     t.integer  "active_group_id", limit: 4
+    t.string   "fb_id",           limit: 255
   end
 
   add_foreign_key "group_users", "groups"
   add_foreign_key "group_users", "users"
   add_foreign_key "invite_users", "invites"
   add_foreign_key "invite_users", "users"
+  add_foreign_key "invites", "groups"
   add_foreign_key "invites", "restaurants"
   add_foreign_key "invites", "users"
+  add_foreign_key "rates", "groups"
+  add_foreign_key "rates", "restaurants"
   add_foreign_key "reviews", "restaurants"
   add_foreign_key "reviews", "users"
 end
