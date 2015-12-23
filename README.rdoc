@@ -1,28 +1,22 @@
-== README
+== DB設計
 
 This README would normally document whatever steps are necessary to get the
 application up and running.
 
-Things you may want to cover:
+* Group 多対多 User
 
-* Ruby version
+* User 多対多 Invite
 
-* System dependencies
+* Invite 多対一 Restaurant (inviteable:references{polymorphic})
 
-* Configuration
+* Restaurant 一対多 Review
 
-* Database creation
+* Review 多対一 User
 
-* Database initialization
+* User 一対多 Invite
 
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+* Invite 多対一 Group (inviteable:references{polymorphic})
 
 
-Please feel free to use a different markup language if you do not plan to run
-<tt>rake doc:app</tt>.
+We want to eat
+<tt>roast hose</tt>.
