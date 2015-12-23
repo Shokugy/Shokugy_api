@@ -4,7 +4,7 @@ module API
       helpers do
         # Strong Parametersの設定
         def create_params
-          ActionController::Parameters.new(params).permit(:name)
+          ActionController::Parameters.new(params).permit(:name, :fb_id)
         end
 
         def violation_params
@@ -18,8 +18,9 @@ module API
         # パラメータのチェック
         # パラメーターの必須(requires)、任意(optional)を指定することができる。
         # use :attributesという形で使うことができる。
-        params :attributes do
+        params :create do
           requires :name, type: String, desc: "User name."
+          requires :fb_id, type: String, desc: "User fb_id"
         end
 
         # パラメータのチェック
@@ -36,7 +37,7 @@ module API
 
         desc 'POST /api/v1/users'
         params do
-          use :attributes
+          use :create
         end
         post '/create', jbuilder: 'api/v1/users/create' do
           @user = User.new(create_params)
@@ -56,7 +57,7 @@ module API
         desc 'PUT /api/v1/users/:id'
         params do
           use :id
-          use :attributes
+          use :create
         end
         put '/:id' do
           set_message_board
