@@ -30,8 +30,19 @@ module API
 
       resource :restaurants do
         desc 'GET /api/v1/restaurants'
-        get '/', jbuilder: 'api/v1/restaurants/index' do
+        get '', jbuilder: 'api/v1/restaurants/index' do
           @restaurants = Restaurant.where(id: 1300..1303)
+        end
+
+        desc 'GET /api/v1/restaurants/ranking'
+        get '/ranking', jbuilder: 'api/v1/restaurants/ranking' do
+          rates = Rate.where(group_id: current_user.active_group_id).order("rate DESC").limit(20)
+          @ranking = []
+          if rates.present?
+            rates.each do |rate|
+              @ranking << rate.restaurant
+            end
+          end
         end
 
         desc 'POST /api/v1/restaurants/search'
