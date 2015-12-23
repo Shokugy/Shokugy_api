@@ -4,5 +4,6 @@ class Invite < ActiveRecord::Base
   has_many :invite_users
   belongs_to :user
   belongs_to :restaurant
+  belongs_to :group
 
 end

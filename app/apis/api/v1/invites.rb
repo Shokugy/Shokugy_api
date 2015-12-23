@@ -29,14 +29,20 @@ module API
 
       resource :invites do
         desc 'GET /api/v1/invites'
-        get '/', jbuilder: 'api/v1/invites/index' do
-          @invites = Invite.where(id: 1300..1303)
+        get '', jbuilder: 'api/v1/invites/index' do
+          @invites = Invite.where(group_id: current_user.active_group_id).order("created_at DESC")
+        end
+
+        desc 'GET /api/v1/invites/mypage'
+        get '/mypage', jbuilder: 'api/v1/invites/mypage' do
+          @invites = current_user.invites.order("created_at DESC")
         end
 
         desc 'POST /api/v1/invites/create'
         params do
           use :create
         end
+        # TODO: current_user.invites.create(text: "good", restaurant_id: 3, group_id: current_user.active_group_id)
         post '', jbuilder: 'api/v1/invites/create' do
           invite = Invite.new(create_params)
           @error_message = invite.error.full_messages unless invite.save
