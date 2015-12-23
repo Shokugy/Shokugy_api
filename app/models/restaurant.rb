@@ -18,7 +18,7 @@ class Restaurant < ActiveRecord::Base
           longitude = GoogleGeocoding.instance.geocode_from(postal_code)[:longitude]
           restaurant.update(latitude: latitude, longitude: longitude)
         end
-        sleep(1)
+        sleep(0.2)
       end
     end
   end
