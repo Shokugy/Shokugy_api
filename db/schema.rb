@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151222144228) do
+ActiveRecord::Schema.define(version: 20151223075209) do
 
   create_table "group_users", force: :cascade do |t|
     t.integer  "group_id",   limit: 4
@@ -65,6 +65,7 @@ ActiveRecord::Schema.define(version: 20151222144228) do
     t.datetime "updated_at",                null: false
     t.float    "latitude",    limit: 24
     t.float    "longitude",   limit: 24
+    t.float    "rate",        limit: 24
   end
 
   create_table "reviews", force: :cascade do |t|
