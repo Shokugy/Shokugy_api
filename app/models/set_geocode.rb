@@ -3,7 +3,7 @@ class SetGeocode
   @@restaurants = Restaurant.new
 
   def initialize
-    @@restaurants = Restaurant.where(latitude: nil)
+    @@restaurants = Restaurant.where(latitude: 0)
     set_geocode
   end
 

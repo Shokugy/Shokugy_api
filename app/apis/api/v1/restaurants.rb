@@ -41,6 +41,7 @@ module API
         post '/search', jbuilder: 'api/v1/restaurants/search' do
           name = search_params[:name]
           @restaurants = Restaurant.where("name LIKE ? OR name_kana LIKE ?", "%#{name}%", "%#{name}%").limit(20)
+          Restaurant.set_geocode(@restaurants)
         end
 
         desc 'GET /api/v1/message_boards/:id'
