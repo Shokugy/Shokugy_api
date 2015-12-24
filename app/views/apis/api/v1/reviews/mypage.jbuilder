@@ -5,6 +5,7 @@ if @reviews
     json.restaurantNameKana review.restaurant.name_kana
     json.restaurantImageUrl review.restaurant.image_url
     json.restaurantAddress review.restaurant.address
+    json.id review.id
     json.review review.review
     json.rate review.rate
   end

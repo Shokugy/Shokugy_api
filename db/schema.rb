@@ -11,7 +11,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151224105019) do
+ActiveRecord::Schema.define(version: 20151224162611) do
+
+  create_table "comments", force: :cascade do |t|
+    t.text     "text",       limit: 65535
+    t.integer  "invite_id",  limit: 4
+    t.integer  "user_id",    limit: 4
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
+  end
+
+  add_index "comments", ["invite_id"], name: "index_comments_on_invite_id", using: :btree
+  add_index "comments", ["user_id"], name: "index_comments_on_user_id", using: :btree
 
   create_table "favorites", force: :cascade do |t|
     t.integer  "user_id",       limit: 4
@@ -120,6 +131,8 @@ ActiveRecord::Schema.define(version: 20151224105019) do
     t.string   "fb_id",           limit: 255
   end
 
+  add_foreign_key "comments", "invites"
+  add_foreign_key "comments", "users"
   add_foreign_key "favorites", "restaurants"
   add_foreign_key "favorites", "users"
   add_foreign_key "group_users", "groups"

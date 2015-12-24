@@ -1,50 +1,50 @@
 module API
   module V1
-    class Reviews < Grape::API
+    class Comments < Grape::API
       helpers do
         # Strong Parametersの設定
-        def create_params
-          ActionController::Parameters.new(params).permit(:review, :rate, :restaurant_id)
+        def comment_params
+          ActionController::Parameters.new(params).permit(:invite_id)
         end
 
-        def set_review
-          @review = Review.find(params[:id])
+        def create_params
+          ActionController::Parameters.new(params).permit(:text, :invite_id)
+        end
+
+        def set_comment
+          @comment = Comment.find(params[:id])
         end
 
         # パラメータのチェック
         # パラメーターの必須、任意を指定することができる。
         # use :attributesという形で使うことができる。
         params :create do
-          requires :review, type: String, desc: "Review review."
-          requires :rate, type: Float, desc: "Review rate."
-          requires :restaurant_id, type: Integer, desc: "Review restaurant_id."
+          requires :text, type: String, desc: "Comment text."
+          requires :invite_id, type: Integer, desc: "Comment invite_id."
         end
 
         # パラメータのチェック
         params :id do
-          requires :id, type: Integer, desc: "Review id."
+          requires :id, type: Integer, desc: "Comment id."
         end
       end
 
-      resource :reviews do
-        desc 'GET /api/v1/reviews'
-        get '/', jbuilder: 'api/v1/reviews/index' do
-          @reviews = Review.where(id: 1300..1303)
+      resource :comments do
+        desc 'GET /api/v1/comments'
+        get '', jbuilder: 'api/v1/comments/index' do
+          invite = Invite.find(comment_params)
+          @comments = invite.comments if invite.comments.present?
         end
 
-        desc 'GET /api/v1/reviews/mypage'
-        get '/mypage', jbuilder: 'api/v1/reviews/mypage' do
-          @reviews = current_user.reviews.order("created_at DESC") if current_user.reviews.present?
-        end
-
-        desc 'POST /api/v1/reviews/create'
+        desc 'POST /api/v1/comments/create'
         params do
           use :create
         end
-        post '/create', jbuilder: 'api/v1/reviews/create' do
-          review = current_user.reviews.create(create_params)
-          unless review.save
-            @error_message = review.error.full_messages
+        post '/create', jbuilder: 'api/v1/comments/create' do
+          comment = current_user.comments.create(create_params)
+          unless comment.save
+            @error_message = comment.error.full_messages
+            return
           end
         end
 
