@@ -4,7 +4,7 @@ module API
       helpers do
         # Strong Parametersの設定
         def create_params
-          ActionController::Parameters.new(params).permit(:text, :restaurant_id).merge(group_id: current_user.active_group_id)
+          ActionController::Parameters.new(params).permit(:text, :restaurant_id, :press_time).merge(group_id: current_user.active_group_id)
         end
 
         def join_params
@@ -19,10 +19,9 @@ module API
         # パラメーターの必須、任意を指定することができる。
         # use :attributesという形で使うことができる。
         params :create do
-          # requires :review, type: String, desc: "Review review."
-          # requires :rate, type: Float, desc: "Review rate."
-          # requires :restaurant_id, type: Integer, desc: "Review restaurant_id"
-          # requires :user_id, type: Integer, desc: "Review user_id"
+          requires :text, type: String, desc: "Invite text."
+          requires :restaurant_id, type: Integer, desc: "Invite restaurant_id."
+          optional :press_time, type: DateTime, desc: "Invite press_time."
         end
 
         # パラメータのチェック
