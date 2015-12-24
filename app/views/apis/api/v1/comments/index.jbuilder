@@ -1,11 +1,9 @@
 if @comments
   json.comments @comments do |comment|
-    json.restaurantId review.restaurant.id
-    json.restaurantName review.restaurant.name
-    json.restaurantNameKana review.restaurant.name_kana
-    json.restaurantImageUrl review.restaurant.image_url
-    json.restaurantAddress review.restaurant.address
-    json.review review.review
-    json.rate review.rate
+    json.commentId comment.id
+    json.text comment.text
+    json.userId comment.user.id
+    json.userFbId comment.user.fb_id
+    json.userName comment.user.name
   end
 end
