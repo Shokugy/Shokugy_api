@@ -17,7 +17,7 @@ module API
         params :create do
           requires :review, type: String, desc: "Review review."
           requires :rate, type: Float, desc: "Review rate."
-          requires :restaurant_id, type: Integer, desc: "Review restaurant_id"
+          requires :restaurant_id, type: Integer, desc: "Review restaurant_id."
         end
 
         # パラメータのチェック
@@ -30,6 +30,13 @@ module API
         desc 'GET /api/v1/reviews'
         get '/', jbuilder: 'api/v1/reviews/index' do
           @reviews = Review.where(id: 1300..1303)
+        end
+
+        desc 'GET /api/v1/reviews/mypage'
+        get '/mypage', jbuilder: 'api/v1/reviews/mypage' do
+          if current_user.reviews.present?
+            @reviews = current_user.reviews.order("created_at DESC")
+          end
         end
 
         desc 'POST /api/v1/reviews/create'
