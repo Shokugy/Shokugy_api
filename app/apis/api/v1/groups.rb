@@ -4,11 +4,11 @@ module API
       helpers do
         # Strong Parametersの設定
         def create_params
-          ActionController::Parameters.new(params).permit(:name, :password, :password_confirmation)
+          ActionController::Parameters.new(params).permit(:name).merge(password: request.headers["Password"], password_confirmation: request.headers["Password-Confirmation"])
         end
 
         def login_params
-          ActionController::Parameters.new(params).permit(:name, :password)
+          ActionController::Parameters.new(params).permit(:name).merge(password: request.headers["Password"])
         end
 
         def set_message_board
@@ -20,13 +20,10 @@ module API
         # use :attributesという形で使うことができる。
         params :create do
           requires :name, type: String, desc: "Group name."
-          requires :password, type: String, desc: "Group password"
-          requires :password_confirmation, type: String, desc: "Group password_confirmation"
         end
 
         params :login do
           requires :name, type: String, desc: "Group name."
-          requires :password, type: String, desc: "Group password."
         end
         # パラメータのチェック
         params :id do
