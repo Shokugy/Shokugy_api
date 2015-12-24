@@ -34,7 +34,7 @@ module API
       resource :groups do
         desc 'GET /api/v1/groups'
         get '', jbuilder: 'api/v1/groups/index' do
-          @user = current_user
+          @groups = current_user.groups
         end
 
         desc 'POST /api/v1/groups'
