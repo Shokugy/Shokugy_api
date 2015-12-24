@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151223212158) do
+ActiveRecord::Schema.define(version: 20151224105019) do
 
   create_table "favorites", force: :cascade do |t|
     t.integer  "user_id",       limit: 4
@@ -60,6 +60,7 @@ ActiveRecord::Schema.define(version: 20151223212158) do
     t.datetime "updated_at",                  null: false
     t.integer  "user_id",       limit: 4
     t.integer  "group_id",      limit: 4
+    t.datetime "press_time"
   end
 
   add_index "invites", ["group_id"], name: "index_invites_on_group_id", using: :btree
