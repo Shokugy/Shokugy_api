@@ -7,6 +7,10 @@ module API
           ActionController::Parameters.new(params).permit(:text, :restaurant_id).merge(group_id: current_user.active_group_id)
         end
 
+        def join_params
+          ActionController::Parameters.new(params).permit(:invite_id)
+        end
+
         def set_invite
           @invite = Invite.find(params[:id])
         end
@@ -53,6 +57,15 @@ module API
           group.users.each do |user|
             user.notifications.create(content: "#{current_user.name}さんが#{restaurant.name}へ一緒に行く仲間を募集しています。") unless user.id == current_user.id
           end
+        end
+
+        desc 'POST /api/v1/invites/join'
+        params do
+          use :id
+        end
+        post '/join' do
+          @invite = Invite.find(join_params)
+          @invite.users << current_user
         end
 
         desc 'GET /api/v1/message_boards/:id'
