@@ -4,7 +4,7 @@ module API
       helpers do
         # Strong Parametersの設定
         def create_params
-          ActionController::Parameters.new(params).permit(:review, :rate, :restaurant_id)
+          ActionController::Parameters.new(params).permit(:text, :invite_id)
         end
 
         def set_comment
@@ -15,38 +15,30 @@ module API
         # パラメーターの必須、任意を指定することができる。
         # use :attributesという形で使うことができる。
         params :create do
-          requires :review, type: String, desc: "Review review."
-          requires :rate, type: Float, desc: "Review rate."
-          requires :restaurant_id, type: Integer, desc: "Review restaurant_id."
+          requires :text, type: String, desc: "Comment text."
+          requires :invite_id, type: Integer, desc: "Comment invite_id."
         end
 
         # パラメータのチェック
         params :id do
-          requires :id, type: Integer, desc: "Review id."
+          requires :id, type: Integer, desc: "Comment id."
         end
       end
 
-      resource :reviews do
-        desc 'GET /api/v1/reviews'
-        get '/', jbuilder: 'api/v1/reviews/index' do
-          @reviews = Review.where(id: 1300..1303)
+      resource :comments do
+        desc 'GET /api/v1/comments'
+        get '/', jbuilder: 'api/v1/comments/index' do
+          @comments = Comment.where(id: 1300..1303)
         end
 
-        desc 'GET /api/v1/reviews/mypage'
-        get '/mypage', jbuilder: 'api/v1/reviews/mypage' do
-          if current_user.reviews.present?
-            @reviews = current_user.reviews.order("created_at DESC")
-          end
-        end
-
-        desc 'POST /api/v1/reviews/create'
+        desc 'POST /api/v1/comments/create'
         params do
           use :create
         end
-        post '/create', jbuilder: 'api/v1/reviews/create' do
-          review = current_user.reviews.create(create_params)
-          unless review.save
-            @error_message = review.error.full_messages
+        post '/create', jbuilder: 'api/v1/comments/create' do
+          comment = current_user.comments.create(create_params)
+          unless comment.save
+            @error_message = comment.error.full_messages
           end
         end
 
