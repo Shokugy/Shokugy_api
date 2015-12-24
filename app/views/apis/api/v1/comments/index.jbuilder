@@ -1,0 +1,11 @@
+if @comments
+  json.comments @comments do |comment|
+    json.restaurantId review.restaurant.id
+    json.restaurantName review.restaurant.name
+    json.restaurantNameKana review.restaurant.name_kana
+    json.restaurantImageUrl review.restaurant.image_url
+    json.restaurantAddress review.restaurant.address
+    json.review review.review
+    json.rate review.rate
+  end
+end

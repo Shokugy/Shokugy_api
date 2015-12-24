@@ -3,6 +3,10 @@ module API
     class Comments < Grape::API
       helpers do
         # Strong Parametersの設定
+        def comment_params
+          ActionController::Parameters.new(params).permit(:invite_id)
+        end
+
         def create_params
           ActionController::Parameters.new(params).permit(:text, :invite_id)
         end
@@ -27,8 +31,9 @@ module API
 
       resource :comments do
         desc 'GET /api/v1/comments'
-        get '/', jbuilder: 'api/v1/comments/index' do
-          @comments = Comment.where(id: 1300..1303)
+        get '', jbuilder: 'api/v1/comments/index' do
+          invite = Invite.find(comment_params)
+          @comments = invite.comments if invite.comments.present?
         end
 
         desc 'POST /api/v1/comments/create'
@@ -39,6 +44,7 @@ module API
           comment = current_user.comments.create(create_params)
           unless comment.save
             @error_message = comment.error.full_messages
+            return
           end
         end
 

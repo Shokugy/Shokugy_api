@@ -34,9 +34,7 @@ module API
 
         desc 'GET /api/v1/reviews/mypage'
         get '/mypage', jbuilder: 'api/v1/reviews/mypage' do
-          if current_user.reviews.present?
-            @reviews = current_user.reviews.order("created_at DESC")
-          end
+          @reviews = current_user.reviews.order("created_at DESC") if current_user.reviews.present?
         end
 
         desc 'POST /api/v1/reviews/create'
