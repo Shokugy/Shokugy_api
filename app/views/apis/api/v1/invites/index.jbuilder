@@ -3,6 +3,7 @@ json.invites @invites do |invite|
   json.userName invite.user.name
   json.restaurantName invite.restaurant.name
   json.restaurantAddress invite.restaurant.address
+  json.id invite.id
   json.text invite.text
   json.pressTime invite.press_time
   json.date invite.created_at
@@ -10,5 +11,5 @@ json.invites @invites do |invite|
   invite.users.each do |user|
     fb_ids << user.fb_id
   end
-  json.nakamaFbIds fb_ids
+  json.joinFbIds fb_ids
 end
