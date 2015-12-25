@@ -11,12 +11,12 @@ module API
           ActionController::Parameters.new(params).permit(:name)
         end
 
-        def favorite_params
+        def restaurant_params
           ActionController::Parameters.new(params).permit(:restaurant_id)
         end
 
         def set_restaurant
-          @restaurant = Restaurant.find(params[:id])
+          @restaurant = Restaurant.find(restaurant_params)
         end
 
         # パラメータのチェック
@@ -25,7 +25,7 @@ module API
         end
 
         params :id do
-          requires :id, type: Integer, desc: "Restaurant id."
+          requires :restaurant_id, type: Integer, desc: "Restaurant id."
         end
       end
 
@@ -70,15 +70,16 @@ module API
           use :id
         end
         post '/favorite', jbuilder: 'api/v1/restaurants/favorite' do
-          current_user.favorites.create(favorite_params)
+          current_user.favorites.create(restaurant_params)
         end
 
-        desc 'GET /api/v1/restaurants/:id'
+        desc 'GET /api/v1/restaurants/:restaurant_id'
         params do
           use :id
         end
-        get '/:id', jbuilder: 'api/v1/restaurants/show' do
+        get '/:restaurant_id', jbuilder: 'api/v1/restaurants/show' do
           set_restaurant
+          @reviews = @restaurant.reviews.where(group_id: current_user.active_group_id).order("created_at DESC")
         end
 
       end

@@ -8,6 +8,6 @@ class Review < ActiveRecord::Base
             :rate,
             :restaurant_id,
             presence: true
-  validation :review, length: { maximum: 15_000 }
+  validates :review, length: { maximum: 15_000 }
 
 end

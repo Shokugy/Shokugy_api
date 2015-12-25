@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151224162611) do
+ActiveRecord::Schema.define(version: 20151225080321) do
 
   create_table "comments", force: :cascade do |t|
     t.text     "text",       limit: 65535
@@ -118,8 +118,10 @@ ActiveRecord::Schema.define(version: 20151224162611) do
     t.integer  "user_id",       limit: 4
     t.datetime "created_at",                  null: false
     t.datetime "updated_at",                  null: false
+    t.integer  "group_id",      limit: 4
   end
 
+  add_index "reviews", ["group_id"], name: "index_reviews_on_group_id", using: :btree
   add_index "reviews", ["restaurant_id"], name: "index_reviews_on_restaurant_id", using: :btree
   add_index "reviews", ["user_id"], name: "index_reviews_on_user_id", using: :btree
 
@@ -145,6 +147,7 @@ ActiveRecord::Schema.define(version: 20151224162611) do
   add_foreign_key "notifications", "users"
   add_foreign_key "rates", "groups"
   add_foreign_key "rates", "restaurants"
+  add_foreign_key "reviews", "groups"
   add_foreign_key "reviews", "restaurants"
   add_foreign_key "reviews", "users"
 end
