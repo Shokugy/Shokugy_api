@@ -18,5 +18,6 @@ if @reviews.present?
     json.id review.id
     json.review review.review
     json.rate review.rate
+    json.userFbId review.user.fb_id
   end
 end
