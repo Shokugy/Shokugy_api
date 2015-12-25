@@ -4,11 +4,11 @@ module API
       helpers do
         # Strong Parametersの設定
         def create_params
-          ActionController::Parameters.new(params).permit(:name).merge(password: request.headers["Password"], password_confirmation: request.headers["Password-Confirmation"])
+          ActionController::Parameters.new(params).permit(:name).merge(passwd: request.headers["Passwd"])
         end
 
         def login_params
-          ActionController::Parameters.new(params).permit(:name).merge(password: request.headers["Password"])
+          ActionController::Parameters.new(params).permit(:name).merge(passwd: request.headers["Passwd"])
         end
 
         def update_params
@@ -59,17 +59,21 @@ module API
           use :attributes
         end
         post '/login', jbuilder: 'api/v1/groups/login' do
-          login_group
-          unless @group
+          group = Group.find_by(name: login_params[:name])
+          unless group
             @error_message = 'login failed'
             return
           end
-          current_user.update(active_group_id: @group.id)
-          unless @group.users.ids.include?(current_user.id)
-            @group.users.each do |user|
-              user.notifications.create(content: "#{current_user.name}さんが#{@group.name}に参加しました。")
+          if group.passwd == login_params[:passwd]
+            current_user.update(active_group_id: group.id)
+            unless group.users.ids.include?(current_user.id)
+              group.users.each do |user|
+                user.notifications.create(content: "#{current_user.name}さんが#{group.name}に参加しました。")
+              end
+              group.users << current_user
             end
-            @group.users << current_user
+          else
+            @error_message = 'login failed'
           end
         end
 
