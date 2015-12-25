@@ -10,4 +10,9 @@ class User < ActiveRecord::Base
   has_many :favorites
   has_many :comments
 
+  # validation
+  validates :name,
+            :fb_id,
+            presence: true
+
 end
