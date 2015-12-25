@@ -4,7 +4,7 @@ module API
       helpers do
         # Strong Parametersの設定
         def create_params
-          ActionController::Parameters.new(params).permit(:review, :rate, :restaurant_id)
+          ActionController::Parameters.new(params).permit(:review, :rate, :restaurant_id).merge(group_id: current_user.active_group_id)
         end
 
         def update_params
