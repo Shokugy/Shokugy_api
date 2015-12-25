@@ -62,7 +62,7 @@ module API
         post '/search', jbuilder: 'api/v1/restaurants/search' do
           name = search_params[:name]
           @restaurants = Restaurant.search_restaurants(name)
-          Restaurant.set_geocode(@restaurants)
+          # Restaurant.set_geocode(@restaurants)
         end
 
         desc 'POST /api/v1/restaurants/favorite'

@@ -1,6 +1,6 @@
 class Restaurant < ActiveRecord::Base
-  geocoded_by :address
-  after_validation :geocode, if: Proc.new { |a| a.address_changed? }
+  # geocoded_by :address
+  # after_validation :geocode, if: Proc.new { |a| a.address_changed? }
 
   # association
   has_many :reviews, dependent: :delete_all
