@@ -8,6 +8,10 @@ class Restaurant < ActiveRecord::Base
   has_many :rates
   has_many :favorites
 
+  # scope
+  scope :high_rates, ->(current_user){ where(group_id: current_user.active_group_id).order("rate DESC").limit(20) }
+  scope :search_restaurants, ->{ where("name LIKE ? OR name_kana LIKE ?", "%#{name}%", "%#{name}%").limit(20) }
+
   class << self
     def set_geocode(restaurants)
       restaurants.each do |restaurant|
