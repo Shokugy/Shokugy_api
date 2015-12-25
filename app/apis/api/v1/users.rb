@@ -32,6 +32,12 @@ module API
           @user = current_user
         end
 
+        desc 'GET /api/v1/users/mypage'
+        get '/mypage', jbuilder: 'api/v1/users/mypage' do
+          @user = current_user
+          @reviews = @user.reviews.where(group_id: @user.active_group_id).order("created_at DESC")
+        end
+
         desc 'POST /api/v1/users'
         params do
           use :attributes
