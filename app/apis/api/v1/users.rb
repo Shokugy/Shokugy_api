@@ -40,6 +40,7 @@ module API
           @user = User.new(create_params)
           unless @user.save
             @error_message = @user.error.full_messages
+            return
           end
         end
 
