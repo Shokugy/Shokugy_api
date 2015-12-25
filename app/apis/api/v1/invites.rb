@@ -27,7 +27,7 @@ module API
         end
 
         params :id do
-          requires :id, type: Integer, desc: "Invite id."
+          requires :invite_id, type: Integer, desc: "Invite id."
         end
       end
 
@@ -59,7 +59,7 @@ module API
           use :id
         end
         post '/join' do
-          @invite = Invite.find(join_params)
+          @invite = Invite.find(join_params[:invite_id])
           @invite.users << current_user
         end
 
