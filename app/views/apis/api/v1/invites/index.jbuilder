@@ -1,6 +1,7 @@
 json.invites @invites do |invite|
   json.userFbId invite.user.fb_id
   json.userName invite.user.name
+  json.restaurantId invite.restaurant.id
   json.restaurantName invite.restaurant.name
   json.restaurantAddress invite.restaurant.address
   json.id invite.id
