@@ -3,10 +3,10 @@ class Restaurant < ActiveRecord::Base
   after_validation :geocode, if: Proc.new { |a| a.address_changed? }
 
   # association
-  has_many :reviews
-  has_many :invites
-  has_many :rates
-  has_many :favorites
+  has_many :reviews, dependent: :delete_all
+  has_many :invites, dependent: :delete_all
+  has_many :rates, dependent: :delete_all
+  has_many :favorites, dependent: :delete_all
 
   # scope
   scope :high_rates, ->(current_user){ where(group_id: current_user.active_group_id).order("rate DESC").limit(20) }

@@ -1,8 +1,8 @@
 class Invite < ActiveRecord::Base
   # association
   has_many :users, through: :invite_users
-  has_many :invite_users
-  has_many :comments
+  has_many :invite_users, dependent: :delete_all
+  has_many :comments, dependent: :delete_all
   belongs_to :user
   belongs_to :restaurant
   belongs_to :group

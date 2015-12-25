@@ -3,9 +3,9 @@ class Group < ActiveRecord::Base
 
   # association
   has_many :users, through: :group_users
-  has_many :group_users
-  has_many :invites
-  has_many :rates
+  has_many :group_users, dependent: :delete_all
+  has_many :invites, dependent: :delete_all
+  has_many :rates, dependent: :delete_all
 
   # validation
   validates :name,
