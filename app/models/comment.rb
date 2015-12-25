@@ -3,4 +3,10 @@ class Comment < ActiveRecord::Base
   belongs_to :invite
   belongs_to :user
 
+  # validation
+  validates :text,
+            :invite_id,
+            presence: true
+  validation :text, length: { maximum: 140 }
+
 end
