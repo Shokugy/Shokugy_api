@@ -7,6 +7,10 @@ module API
           ActionController::Parameters.new(params).permit(:text, :restaurant_id, :press_time).merge(group_id: current_user.active_group_id)
         end
 
+        def update_params
+          ActionController::Parameters.new(params).permit(:text, :restaurant_id, :press_time).merge(user_id: current_user.id).merge(group_id: current_user.active_group_id)
+        end
+
         def join_params
           ActionController::Parameters.new(params).permit(:invite_id)
         end
@@ -16,15 +20,12 @@ module API
         end
 
         # パラメータのチェック
-        # パラメーターの必須、任意を指定することができる。
-        # use :attributesという形で使うことができる。
-        params :create do
+        params :attributes do
           requires :text, type: String, desc: "Invite text."
           requires :restaurant_id, type: Integer, desc: "Invite restaurant_id."
           optional :press_time, type: DateTime, desc: "Invite press_time."
         end
 
-        # パラメータのチェック
         params :id do
           requires :id, type: Integer, desc: "Invite id."
         end
@@ -33,7 +34,7 @@ module API
       resource :invites do
         desc 'GET /api/v1/invites'
         get '', jbuilder: 'api/v1/invites/index' do
-          @invites = Invite.where(group_id: current_user.active_group_id).order("created_at DESC")
+          @invites = Invite.timeline_invites(current_user)
         end
 
         desc 'GET /api/v1/invites/mypage'
@@ -43,7 +44,7 @@ module API
 
         desc 'POST /api/v1/invites/create'
         params do
-          use :create
+          use :attributes
         end
         post '', jbuilder: 'api/v1/invites/create' do
           invite = current_user.invites.new(create_params)
@@ -67,31 +68,32 @@ module API
           @invite.users << current_user
         end
 
-        desc 'GET /api/v1/message_boards/:id'
+        desc 'GET /api/v1/invites/:id'
         params do
           use :id
         end
-        get '/:id', jbuilder: 'api/v1/message_boards/show' do
-          set_message_board
+        get '/:id', jbuilder: 'api/v1/invites/show' do
+          set_invite
         end
 
-        desc 'PUT /api/v1/message_boards/:id'
+        # FIXME: なくてよいかも
+        desc 'PUT /api/v1/invites/:id'
         params do
           use :id
-          use :create
+          use :attributes
         end
         put '/:id' do
-          set_message_board
-          @message_board.update(message_board_params)
+          set_invite
+          @invite.update(update_params)
         end
 
-        desc 'DELETE /api/v1/message_boards/:id'
+        desc 'DELETE /api/v1/invites/:id'
         params do
           use :id
         end
         delete '/:id' do
-          set_message_board
-          @message_board.destroy
+          set_invite
+          @invite.destroy
         end
       end
     end
