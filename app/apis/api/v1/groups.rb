@@ -11,21 +11,23 @@ module API
           ActionController::Parameters.new(params).permit(:name).merge(password: request.headers["Password"])
         end
 
-        def set_message_board
-          @message_board = MessageBoard.find(params[:id])
+        def update_params
+          ActionController::Parameters.new(params).permit(:name).merge(password: request.headers["Password"], password_confirmation: request.headers["Password-Confirmation"])
+        end
+
+        def login_group
+          @group = login(login_params)
+        end
+
+        def set_group
+          @group = Group.find(params[:id])
         end
 
         # パラメータのチェック
-        # パラメーターの必須(requires)、任意(optional)を指定することができる。
-        # use :attributesという形で使うことができる。
-        params :create do
+        params :attributes do
           requires :name, type: String, desc: "Group name."
         end
 
-        params :login do
-          requires :name, type: String, desc: "Group name."
-        end
-        # パラメータのチェック
         params :id do
           requires :id, type: Integer, desc: "Group id."
         end
@@ -39,7 +41,7 @@ module API
 
         desc 'POST /api/v1/groups'
         params do
-          use :create
+          use :attributes
         end
         post '/create', jbuilder: 'api/v1/groups/create' do
           @group = Group.new(create_params)
@@ -52,10 +54,11 @@ module API
 
         desc 'POST /api/v1/groups/login'
         params do
-          use :login
+          use :attributes
         end
         post '/login', jbuilder: 'api/v1/groups/login' do
-          unless @group = login(login_params)
+          login_group
+          unless @group
             @error_message = 'login failed'
             return
           end
@@ -73,16 +76,21 @@ module API
           use :id
         end
         get '/:id', jbuilder: 'api/v1/groups/show' do
-          set_message_board
+          set_group
         end
 
         desc 'PUT /api/v1/groups/:id'
         params do
           use :id
+          use :attributes
         end
         put '/:id' do
-          set_message_board
-          @message_board.update(message_board_params)
+          set_group
+          @group.password_confirmation = update_params[:password_confirmation]
+          unless @group.change_password!(update_params[:password])
+            @error_message = 'password update failed'
+            return
+          end
         end
 
         desc 'DELETE /api/v1/groups/:id'
@@ -90,16 +98,8 @@ module API
           use :id
         end
         delete '/:id' do
-          set_message_board
-          @message_board.destroy
-        end
-
-        desc 'POST /api/v1/groups/report'
-        post '/report', jbuilder: 'api/v1/groups/report' do
-          @violation = Violation.new(violation_params)
-          unless @violation.save
-            @error_message = @letter.errors.full_messages
-          end
+          set_group
+          @group.destroy
         end
       end
     end
