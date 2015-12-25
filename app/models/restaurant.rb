@@ -10,7 +10,7 @@ class Restaurant < ActiveRecord::Base
 
   # scope
   scope :high_rates, ->(current_user){ where(group_id: current_user.active_group_id).order("rate DESC").limit(20) }
-  scope :search_restaurants, ->{ where("name LIKE ? OR name_kana LIKE ?", "%#{name}%", "%#{name}%").limit(20) }
+  scope :search_restaurants, ->(name){ where("name LIKE ? OR name_kana LIKE ?", "%#{name}%", "%#{name}%").limit(20) }
 
   class << self
     def set_geocode(restaurants)
