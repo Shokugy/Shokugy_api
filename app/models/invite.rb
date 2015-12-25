@@ -7,4 +7,8 @@ class Invite < ActiveRecord::Base
   belongs_to :restaurant
   belongs_to :group
 
+  # validation
+  validates_presence_of :text, on: :create
+  validates :text, length: { maximum: 140 }
+
 end
