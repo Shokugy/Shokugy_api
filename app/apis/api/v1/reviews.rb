@@ -48,6 +48,14 @@ module API
             @error_message = review.error.full_messages
             return
           end
+          restaurant = Restaurant.find(create_params[:restaurant_id])
+          unless restaurant.rates.present?
+            restaurant.rates.create(rate: review.rate, group_id: current_user.active_group_id)
+          else
+            rate = restaurant.rates.find_by(group_id: current_user.active_group_id)
+            restaurant_rate = restaurant.reviews.where(group_id: user.active_group_id).average(:rate)
+            rate.update(rate: Float(restaurant_rate).round(1))
+          end
         end
 
         desc 'GET /api/v1/reviews/:id'
