@@ -7,6 +7,6 @@ class Comment < ActiveRecord::Base
   validates :text,
             :invite_id,
             presence: true
-  validation :text, length: { maximum: 140 }
+  validates :text, length: { maximum: 140 }
 
 end

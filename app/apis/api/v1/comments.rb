@@ -52,6 +52,8 @@ module API
             @error_message = comment.error.full_messages
             return
           end
+          user = Invite.find(comment.invite_id).user
+          user.notifications.create(content: "#{comment.user.name} #{comment.text}") unless user.id == current_user.id
         end
 
         desc 'GET /api/v1/comments/:id'
