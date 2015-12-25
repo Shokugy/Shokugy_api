@@ -37,11 +37,6 @@ module API
           @invites = Invite.timeline_invites(current_user)
         end
 
-        desc 'GET /api/v1/invites/mypage'
-        get '/mypage', jbuilder: 'api/v1/invites/mypage' do
-          @invites = current_user.invites.order("created_at DESC")
-        end
-
         desc 'POST /api/v1/invites/create'
         params do
           use :attributes
