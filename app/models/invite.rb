@@ -14,4 +14,7 @@ class Invite < ActiveRecord::Base
             presence: true
   validates :text, length: { maximum: 140 }
 
+  # scope
+  scope :timeline_invites, ->(current_user){ where(group_id: current_user.active_group_id).order("created_at DESC") }
+
 end

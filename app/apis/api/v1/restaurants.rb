@@ -20,13 +20,10 @@ module API
         end
 
         # パラメータのチェック
-        # パラメーターの必須、任意を指定することができる。
-        # use :attributesという形で使うことができる。
         params :search do
           requires :name, type: String, desc: "Restaurant name."
         end
 
-        # パラメータのチェック
         params :id do
           requires :id, type: Integer, desc: "Restaurant id."
         end
@@ -40,10 +37,10 @@ module API
 
         desc 'GET /api/v1/restaurants/ranking'
         get '/ranking', jbuilder: 'api/v1/restaurants/ranking' do
-          rates = Rate.where(group_id: current_user.active_group_id).order("rate DESC").limit(10)
+          ranking_rates = Rate.high_rates(current_user)
           @ranking = []
-          if rates.present?
-            rates.each do |rate|
+          if ranking_rates.present?
+            ranking_rates.each do |rate|
               @ranking << rate.restaurant
             end
           end
@@ -52,7 +49,8 @@ module API
         desc 'GET /api/v1/restaurants/favorite'
         get '/favorite', jbuilder: 'api/v1/restaurants/favorite' do
           @favorites = []
-          current_user.favorites.order("created_at DESC").each do |favorite|
+          favorites = current_user.favorites.order("created_at DESC")
+          favorites.each do |favorite|
             @favorites << Restaurant.find(favorite.restaurant_id)
           end
         end
@@ -63,7 +61,7 @@ module API
         end
         post '/search', jbuilder: 'api/v1/restaurants/search' do
           name = search_params[:name]
-          @restaurants = Restaurant.where("name LIKE ? OR name_kana LIKE ?", "%#{name}%", "%#{name}%").limit(20)
+          @restaurants = Restaurant.search_restaurants
           Restaurant.set_geocode(@restaurants)
         end
 
@@ -75,32 +73,14 @@ module API
           current_user.favorites.create(favorite_params)
         end
 
-        desc 'GET /api/v1/message_boards/:id'
+        desc 'GET /api/v1/restaurants/:id'
         params do
           use :id
         end
-        get '/:id', jbuilder: 'api/v1/message_boards/show' do
-          set_message_board
+        get '/:id', jbuilder: 'api/v1/restaurants/show' do
+          set_restaurant
         end
 
-        desc 'PUT /api/v1/message_boards/:id'
-        params do
-          use :id
-          use :search
-        end
-        put '/:id' do
-          set_message_board
-          @message_board.update(message_board_params)
-        end
-
-        desc 'DELETE /api/v1/message_boards/:id'
-        params do
-          use :id
-        end
-        delete '/:id' do
-          set_message_board
-          @message_board.destroy
-        end
       end
     end
   end

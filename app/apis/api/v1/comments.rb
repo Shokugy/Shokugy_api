@@ -11,19 +11,25 @@ module API
           ActionController::Parameters.new(params).permit(:text, :invite_id)
         end
 
+        def update_params
+          ActionController::Parameters.new(params).permit(:text, :invite_id).merge(user_id: current_user.id)
+        end
+
         def set_comment
           @comment = Comment.find(params[:id])
         end
 
         # パラメータのチェック
-        # パラメーターの必須、任意を指定することができる。
-        # use :attributesという形で使うことができる。
         params :create do
           requires :text, type: String, desc: "Comment text."
           requires :invite_id, type: Integer, desc: "Comment invite_id."
         end
 
-        # パラメータのチェック
+        params :update do
+          requires :text, type: String, desc: "Comment text."
+          requires :invite_id, type: Integer, desc: "Comment invite_id."
+        end
+
         params :id do
           requires :id, type: Integer, desc: "Comment id."
         end
@@ -48,31 +54,31 @@ module API
           end
         end
 
-        desc 'GET /api/v1/message_boards/:id'
+        desc 'GET /api/v1/comments/:id'
         params do
           use :id
         end
-        get '/:id', jbuilder: 'api/v1/message_boards/show' do
-          set_message_board
+        get '/:id', jbuilder: 'api/v1/comments/show' do
+          set_comment
         end
 
-        desc 'PUT /api/v1/message_boards/:id'
+        desc 'PUT /api/v1/comments/:id'
         params do
           use :id
-          use :create
+          use :update
         end
         put '/:id' do
-          set_message_board
-          @message_board.update(message_board_params)
+          set_comment
+          @comment.update(update_params)
         end
 
-        desc 'DELETE /api/v1/message_boards/:id'
+        desc 'DELETE /api/v1/comments/:id'
         params do
           use :id
         end
         delete '/:id' do
-          set_message_board
-          @message_board.destroy
+          set_comment
+          @comment.destroy
         end
       end
     end
