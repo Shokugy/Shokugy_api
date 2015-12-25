@@ -9,12 +9,12 @@ class Group < ActiveRecord::Base
 
   # validation
   validates :name,
-            :password,
-            :password_confirmation,
+            :passwd,
+            # :password_confirmation,
             presence: true
   validates :name, uniqueness: true
   validates :name, length: { maximum: 12 }
-  validates :password, length: { minimum: 3 }
-  validates :password, confirmation: true
+  validates :passwd, length: { minimum: 3 }
+  # validates :password, confirmation: true
 
 end
