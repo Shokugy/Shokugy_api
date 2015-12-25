@@ -14,7 +14,7 @@ module API
       resource :notifications do
         desc 'GET /api/v1/notifications'
         get '', jbuilder: 'api/v1/notifications/index' do
-          @notifications = Notification.where(user_id: current_user.id).order("created_at DESC")
+          @notifications = Notification.timeline_notifications(current_user)
         end
       end
     end
