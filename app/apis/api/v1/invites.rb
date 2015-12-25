@@ -38,10 +38,10 @@ module API
         end
 
         desc 'POST /api/v1/invites/create'
-        # params do
-        #   use :attributes
-        # end
-        post '', jbuilder: 'api/v1/invites/create' do
+        params do
+          use :attributes
+        end
+        post '/create', jbuilder: 'api/v1/invites/create' do
           invite = current_user.invites.new(create_params)
           unless invite.save
             @error_message = invite.error.full_messages
