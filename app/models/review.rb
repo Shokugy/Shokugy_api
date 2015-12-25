@@ -6,6 +6,7 @@ class Review < ActiveRecord::Base
   # validation
   validates :review,
             :rate,
+            :restaurant_id,
             presence: true
   validation :review, length: { maximum: 15_000 }
 

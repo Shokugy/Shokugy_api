@@ -9,6 +9,9 @@ class Invite < ActiveRecord::Base
 
   # validation
   validates_presence_of :text, on: :create
+  validates :text,
+            :restaurant_id,
+            presence: true
   validates :text, length: { maximum: 140 }
 
 end

@@ -4,7 +4,9 @@ class Comment < ActiveRecord::Base
   belongs_to :user
 
   # validation
-  validates_presence_of :text, on: :create
+  validates :text,
+            :invite_id,
+            presence: true
   validation :text, length: { maximum: 140 }
 
 end
