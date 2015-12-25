@@ -50,6 +50,8 @@ module API
             return
           end
           @group.users << current_user
+          # TODO: ほりけんと確認
+          current_user.update(active_group_id: @group.id)
         end
 
         desc 'POST /api/v1/groups/login'
