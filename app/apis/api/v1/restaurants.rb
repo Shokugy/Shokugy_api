@@ -74,9 +74,9 @@ module API
         end
 
         desc 'GET /api/v1/restaurants/:restaurant_id'
-        params do
-          use :id
-        end
+        # params do
+        #   use :id
+        # end
         get '/:restaurant_id', jbuilder: 'api/v1/restaurants/show' do
           set_restaurant
           @reviews = @restaurant.reviews.where(group_id: current_user.active_group_id).order("created_at DESC")
