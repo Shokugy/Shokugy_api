@@ -76,17 +76,6 @@ module API
           set_invite
         end
 
-        # FIXME: なくてよいかも
-        desc 'PUT /api/v1/invites/:id'
-        params do
-          use :id
-          use :attributes
-        end
-        put '/:id' do
-          set_invite
-          @invite.update(update_params)
-        end
-
         desc 'DELETE /api/v1/invites/:id'
         params do
           use :id
